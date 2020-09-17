@@ -36,7 +36,7 @@ public class ProposalsController {
             ProposalCreateResponse proposalCreateResponse = new ProposalCreateResponse(proposal);
             URI entityURI = uriComponentsBuilder.path("/propostas/{id}").build(proposal.getId());
             return ResponseEntity.created(entityURI).body(proposalCreateResponse);
-        } catch (DataIntegrityViolationException exception) {
+        } catch (ConstraintViolationException | DataIntegrityViolationException exception) {
             exception.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } catch (Exception exception) {

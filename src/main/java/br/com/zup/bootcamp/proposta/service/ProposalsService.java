@@ -13,12 +13,20 @@ import java.util.List;
 public class ProposalsService {
 
     private ProposalsRepository proposalsRepository;
+    private BureauService bureauService;
 
-    public ProposalsService(ProposalsRepository proposalsRepository) {
+    public ProposalsService(
+            ProposalsRepository proposalsRepository,
+            BureauService bureauService
+    ) {
         this.proposalsRepository = proposalsRepository;
+        this.bureauService = bureauService;
     }
 
     public Proposal createProposal(@Valid ProposalCreateRequest proposalCreateRequest) {
+        if (!bureauService.isEligible(proposalCreateRequest.getDocument())) {
+            throw new RuntimeException();
+        }
         Proposal proposal = new Proposal(
                 proposalCreateRequest.getDocument(),
                 proposalCreateRequest.getEmail(),
